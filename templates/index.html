@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-dark">💻 Informática & Tecnología - Catálogo</h1>
+            <p class="text-muted">Encuentra los mejores equipos, periféricos y accesorios al mejor precio.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{{ url_for('productos') }}" class="btn btn-primary">
+                <i class="bi bi-gear"></i> Administrar Productos
+            </a>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <hr>
+
+    <div class="row mt-4">
+        {% if productos %}
+            {% for prod in productos %}
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 position-relative" style="border-radius: 12px; overflow: hidden;">
+                        <img src="{{ obtener_ruta_imagen(prod.imagen) }}" class="card-img-top p-3 rounded" alt="{{ prod.nombre }}" style="height: 250px; object-fit: contain; background-color: #fff;">
+                        
+                        <div class="card-body d-flex flex-column p-4">
+                            <span class="badge bg-light text-primary align-self-start mb-2 px-2.5 py-1.5 fw-semibold" style="font-size: 0.85rem;">
+                                {% if prod.categoria_id == 1 or prod.categoria_id == '1' %}
+                                    Equipos y Laptops
+                                {% elif prod.categoria_id == 2 or prod.categoria_id == '2' %}
+                                    Periféricos y Accesorios
+                                {% elif prod.categoria_id == 3 or prod.categoria_id == '3' %}
+                                    Componentes y Redes
+                                {% else %}
+                                    General
+                                {% endif %}
+                            </span>
+                            
+                            <h5 class="card-title text-dark fw-bold mb-2">{{ prod.nombre }}</h5>
+                            
+                            <p class="card-text text-muted small mb-3">{{ prod.descripcion }}</p>
+                            
+                            <h3 class="text-success fw-bold mb-3">${{ "%.2f"|format(prod.precio) }}</h3>
+                            
+                            <a href="{{ url_for('agregar_al_carrito', id=prod.id) }}" class="btn btn-success mt-auto w-100 py-2 fw-semibold">
+                                <i class="bi bi-cart-plus-fill"></i> Agregar al carrito
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-warning d-inline-block px-5" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> No hay productos disponibles en el catálogo en este momento.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

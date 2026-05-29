@@ -1,0 +1,55 @@
+
+
+
+{% extends "base.html"%}
+{% block titulo %}Pedido confirmado{% endblock %}
+
+{% block contenido %}
+<main class="container my-5">
+    <div class ="confirmacion-card text-center shadow">
+        <div class="icono-confirmacion">
+👍
+        </div>
+        <h1 class="fw-bold">Pedido confirmado</h1>
+        <p class="lead">Gracias por tu compra,{{pedido.nombre_cliente}}.
+        </p>
+        <p>
+Tu pedido fue registrado correctamente...
+        </p>
+
+    </br>
+    <h2 class="fw-bold">Datos del pedido:#{{pedido.id_pedido}}</h2>
+    <p><strong>Correo:</strong>{{pedido.correo_cliente}}</p>
+    <p><strong>Telefono:</strong>{{pedido.telefono_cliente}}</p>
+    <p><strong>Direccion:</strong>{{pedido.direccion_cliente}}</p>
+    <p><strong>Método de pago:</strong>{{pedido.metodo_cliente}}</p>
+    <div class="table-responsive mt-4">
+        <table class="table table-responsive mt-4">
+            <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+            </thead>
+            </tbody>
+            {% for detalle in detalles %}
+            <tr>
+                <th>{{detalle.nombre_producto}}</th>
+                <th>{{detalle.cantidad}}</th>
+                <th>${{"%.2f"|formmat(detalle.porecio_unitario)}}</th>
+                <th>${{"%.2f"|formmat(detalle.subtotal)}}</th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<h3 class="mt-4">Total:<strong>${{"$.2f"|format(pedido.total)}}
+</strong></h3>
+<a href="{{url_for('inicio')}}" class="btn btn-warning fw-bold mt-4">
+Icono de volver a la tienda
+</a>
+    </div>
+</main>
+{% endblock %}

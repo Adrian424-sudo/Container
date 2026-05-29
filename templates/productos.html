@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Registrar Producto</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('productos') }}" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej. Tenis Nike" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="precio" class="form-label">Precio ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="precio" name="precio" placeholder="0.00" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="categoria" name="categoria_id" required>
+                                <option value="" selected disabled>Selecciona una categoría</option>
+                                <option value="1">Pastillas</option>
+                                <option value="2">Medicina</option>
+                                <option value="3">Salud</option>
+                                <option value="4">Jarabes</option>
+                                <option value="5">Tabletas</option>
+                                <option value="6">Inyectables</option>
+                                {% for cat in categorias %}
+                                    <option value="{{ cat.id }}">{{ cat.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="imagen" class="form-label">Imagen del Producto</label>
+                            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Guardar Producto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h3 class="mb-4">Nuestro Catálogo (Estilo Mercado Libre)</h3>
+            <div class="row">
+                {% if productos %}
+                    {% for prod in productos %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="{{ url_for('static', filename='uploads/' + prod.imagen) }}" class="card-img-top" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title text-dark">{{ prod.nombre }}</h5>
+                                    <p class="card-text text-muted mb-1">
+                                        <span class="badge bg-secondary">{{ prod.categoria_relacion.nombre if prod.categoria_relacion else 'Sin categoría' }}</span>
+                                    </p>
+                                    <h4 class="text-success font-weight-bold">${{ "%.2f"|format(prod.precio) }}</h4>
+                                    
+                                    <a href="{{ url_for('agregar_al_carrito', id=prod.id) }}" class="btn btn-success mt-auto w-100">
+                                        <i class="bi bi-cart-plus"></i> Agregar al carrito
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center" role="alert">
+                            No hay productos registrados todavía. ¡Sé el primero en agregar uno!
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

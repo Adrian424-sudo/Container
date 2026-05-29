@@ -1,0 +1,51 @@
+
+
+
+{% extends "base.html"%}
+{% block titulo %}Pedido registrado{% endblock %}
+
+
+{% block contenido %}
+<main class="container my-5">
+    <h1 class ="text-center fw-bold mb-4">Pedidos registrados</h1>
+        <div class="card shadow formulario-card">
+        <div class="card-body">
+
+
+<div class="table responsive">
+    <div class="table-responsive mt-4">
+        <table class="table table-responsive mt-4">
+            <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Cliente</th>
+                <th>Correo</th>
+                <th>Metodo</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+            </tr>
+            </thead>
+            </tbody>
+            {% for detalle in detalles %}
+            <tr>
+                <th>{{pedido.id_pedido}}</th>
+                <th>{{pedido.nombre_cliente}}</th>
+                <th>${{pedido.correo_cliente}}</th>
+                <th>${{pedido.metodo_pago}}</th>
+                <th>${{"%.2f"|formmat(pedido.total)}}</th>
+                <th><span class="badge text-bg-warning">
+                ${{"%.2f"|formmat(pedido.estado)}}</th>
+            </tr>
+            {% else %}<tr>
+                <th><colspan class="text-center text-muted">
+                No hay pedidos</th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+</main>
+{% endblock %}
